@@ -19,7 +19,7 @@ jobs:
           ndk-version: r21e
       - name: Build (Android.mk)
         run: |
-          ./build-scripts/androidbuildlibs.sh
+          ./build-scripts/androidbuildlibs.sh NDK_DEBUG=0
       - uses: actions/upload-artifact@master
         with:
           name: SDL2-${{ github.sha }}
