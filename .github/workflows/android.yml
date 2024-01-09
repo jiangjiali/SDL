@@ -1,6 +1,13 @@
 name: Build (Android)
 
-on: [push, pull_request]
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'tag name'
+        required: true
+
+# on: [push, pull_request]
 
 jobs:
   android:
