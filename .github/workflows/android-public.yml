@@ -87,4 +87,4 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: SDL2-${{ github.sha }}
-          path: ./SDL/**/*
+          path: ./build/android/**/*
