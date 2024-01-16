@@ -12,11 +12,11 @@ jobs:
     name: ${{ matrix.platform.name }}
     runs-on: ubuntu-latest
     steps:
-      - name: 配置NDK r21e
+      - name: 配置NDK r26b
         uses: nttld/setup-ndk@v1
         id: setup_ndk
         with:
-          ndk-version: r21e
+          ndk-version: r26b
       - name: 检出代码
         uses: actions/checkout@v3
       - name: 安装环境
