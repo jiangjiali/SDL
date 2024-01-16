@@ -13,11 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 配置NDK r21e
-        uses: actions/checkout@v3
         uses: nttld/setup-ndk@v1
         id: setup_ndk
         with:
           ndk-version: r21e
+      - name: 检出代码
+        uses: actions/checkout@v3
       - name: 安装环境
         run: |
           sudo apt-get update
