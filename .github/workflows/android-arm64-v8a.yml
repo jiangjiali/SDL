@@ -26,7 +26,7 @@ jobs:
           cmake -S . -B build_arm64 \
               -DANDROID_PLATFORM=android-24 \
               -DANDROID_ABI=arm64-v8a \
-              -DCMAKE_INSTALL_PREFIX=prefix \
+              -DCMAKE_INSTALL_PREFIX=./SDL_Android_arm64 \
               -DCMAKE_TOOLCHAIN_FILE=${{ steps.setup_ndk.outputs.ndk-path }}/build/cmake/android.toolchain.cmake \
               -DSDL_SHARED=ON -DSDL_STATIC=ON -DSDL_STATIC_PIC=ON -DSDL_TEST=ON \
               -DSDL2_DISABLE_SDL2MAIN=OFF -DSDL2_DISABLE_INSTALL=OFF \
@@ -35,10 +35,10 @@ jobs:
               -GNinja
       - name: Build
         run: |
-          cmake --build build --config Release --parallel --verbose
+          cmake --build build_arm64 --config Release --parallel --verbose
       - name: Install
         run: |
-          cmake --install build --config Release
+          cmake --install build_arm64 --config Release
           echo "SDL2_DIR=$(pwd)/prefix" >> $GITHUB_ENV
           ( cd prefix; find ) | LC_ALL=C sort -u
           ls
@@ -46,4 +46,4 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: SDL2-${{ github.sha }}
-          path: prefix/**/*
+          path: ./SDL_Android_arm64/**/*
