@@ -1,0 +1,48 @@
+name: Build (Android-ARM)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'tag name'
+        required: true
+
+jobs:
+  android:
+    name: ${{ matrix.platform.name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 配置NDK r21e
+        uses: nttld/setup-ndk@v1
+        id: setup_ndk
+        with:
+          ndk-version: r21e
+      - name: 检出代码
+        uses: actions/checkout@v3
+      - name: 安装环境
+        run: |
+          sudo apt-get update
+          sudo apt-get install ninja-build pkg-config
+      - name: 配置项目
+        run: |
+          cmake -S . -B build_arm \
+              -DANDROID_PLATFORM=android-25 \
+              -DANDROID_ABI=armeabi-v7a \
+              -DCMAKE_INSTALL_PREFIX=./SDL_Android_arm \
+              -DCMAKE_TOOLCHAIN_FILE=${{ steps.setup_ndk.outputs.ndk-path }}/build/cmake/android.toolchain.cmake \
+              -DSDL_SHARED=ON -DSDL_STATIC=ON -DSDL_STATIC_PIC=ON -DSDL_TEST=ON \
+              -DSDL2_DISABLE_SDL2MAIN=OFF -DSDL2_DISABLE_INSTALL=OFF \
+              -DCMAKE_INSTALL_INCLUDEDIR=include -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release \
+              -DSDL_VENDOR_INFO="Github Workflow" \
+              -GNinja
+      - name: 编译
+        run: |
+          cmake --build build_arm --config Release --parallel --verbose
+      - name: 安装
+        run: |
+          cmake --install build_arm --config Release
+      - name: 上传
+        uses: actions/upload-artifact@master
+        with:
+          name: SDL2-${{ github.sha }}
+          path: ./SDL_Android_arm/**/*
