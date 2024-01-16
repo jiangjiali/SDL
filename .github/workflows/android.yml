@@ -59,12 +59,13 @@ jobs:
           cmake --install build --config Release
           echo "SDL2_DIR=$(pwd)/prefix" >> $GITHUB_ENV
           ( cd prefix; find ) | LC_ALL=C sort -u
+          ls
       - name: 上传资源 (CMake)
         if: ${{ matrix.platform.name == 'CMake' }}
         uses: actions/upload-artifact@master
         with:
           name: SDL2-${{ github.sha }}
-          path: ./SDL/prefix/**/*
+          path: ./build/**/*
       - name: Verify CMake configuration files
         if: ${{ matrix.platform.name == 'CMake' }}
         run: |
